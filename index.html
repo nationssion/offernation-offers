@@ -16,6 +16,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet"/>
 
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
   <style>
     :root{
       --ink:#0f172a;
@@ -23,12 +26,16 @@
       --card:#ffffff;
       --bg:#f8fafc;
       --line:#eef2f6;
-      --brand:#1e66f5; /* Offernation blue */
-      --accent:#12b981; /* success green */
-      --ng:#128807;     /* Nigeria green */
-      --gh:#f1c40f;     /* Ghana gold */
+      --brand:#1e66f5;
+      --accent:#12b981;
+      --ng:#128807;
+      --gh:#8b5e00;
+      --ng-bg:#f0fff4;
+      --gh-bg:#fffcee;
       --cta:#0ea858;
       --cta2:#0a7d43;
+      --footer-bg:#0f172a;
+      --footer-text:#cbd5e1;
     }
     *{box-sizing:border-box}
     html,body{margin:0}
@@ -48,67 +55,133 @@
       display:flex;align-items:center;gap:12px;
     }
     .logo{
-      width:40px;height:40px; border-radius:10px;
-      background:linear-gradient(135deg, #1e66f5, #12b981);
+      width:44px;height:44px; border-radius:12px;
+      background:linear-gradient(135deg, var(--brand), var(--accent));
       display:grid;place-items:center;color:#fff;font-weight:800;
       box-shadow:0 8px 20px rgba(30,102,245,.2);
+      font-size:18px;
     }
-    h1{font-size:20px;margin:0}
-    .sub{color:var(--muted);font-size:13px;margin-top:2px}
+    h1{font-size:22px;margin:0;font-weight:800;}
+    .sub{color:var(--muted);font-size:13px;margin-top:4px;}
+    
     .filters{
       display:flex;gap:8px;flex-wrap:wrap;
     }
     .chip{
-      padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;
+      padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:#fff;
       color:#0f172a;font-weight:600;font-size:13px;cursor:pointer;
+      transition: all 0.2s ease;
     }
-    .chip.active{border-color:var(--brand);color:var(--brand);background:#eef4ff}
+    .chip.active{
+      border-color:var(--brand);color:var(--brand);background:#eef4ff;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(30,102,245,0.1);
+    }
+
     .grid{
-      display:grid;gap:14px;margin-top:14px;
-      grid-template-columns:repeat(1, minmax(0, 1fr));
+      display:grid;gap:18px;margin-top:16px;
     }
     @media (min-width:720px){ .grid{ grid-template-columns:repeat(2, minmax(0, 1fr)); } }
     @media (min-width:1024px){ .grid{ grid-template-columns:repeat(3, minmax(0, 1fr)); } }
 
     .card{
-      background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;
-      display:flex;flex-direction:column;min-height:240px;
-      box-shadow:0 12px 28px rgba(16,23,42,.04);
+      background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;
+      display:flex;flex-direction:column;min-height:260px;
+      box-shadow:0 10px 24px rgba(16,23,42,.06);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover{
+      transform: translateY(-4px);
+      box-shadow:0 14px 32px rgba(16,23,42,.08);
     }
     .cardTop{
-      padding:14px 14px 8px;display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:16px 16px 10px;display:flex;align-items:center;justify-content:space-between;gap:10px;
     }
     .badge{
-      font-size:12px;font-weight:800;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:#fff;
+      font-size:12px;font-weight:800;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:#fff;
       display:inline-flex;align-items:center;gap:8px;
     }
-    .badge.ng{ border-color:#bfe3c6;background:#f0fff4;color:var(--ng) }
-    .badge.gh{ border-color:#ffe9a8;background:#fffcee;color:#8b5e00 }
-    .payout{font-size:12px;color:#0b7a42;background:#eafff3;border:1px solid #bff1d7;border-radius:999px;padding:6px 10px;font-weight:700}
+    .badge.ng{ background:var(--ng-bg); color:var(--ng); border-color:rgba(18,136,7,.3); }
+    .badge.gh{ background:var(--gh-bg); color:var(--gh); border-color:rgba(139,94,0,.3); }
 
-    .cardBody{padding:0 14px 12px}
-    .title{font-size:16px;font-weight:800;line-height:1.3;margin:4px 0 6px}
-    .desc{font-size:13px;color:var(--muted);line-height:1.5;margin:0 0 10px}
+    .payout{
+      font-size:12px;color:#0b7a42;background:#eafff3;border:1px solid #bff1d7;
+      border-radius:999px;padding:6px 12px;font-weight:700;
+    }
+
+    .cardBody{padding:0 16px 14px;}
+    .title{font-size:16px;font-weight:800;line-height:1.3;margin:4px 0 8px;}
+    .desc{font-size:13px;color:var(--muted);line-height:1.5;margin:0 0 12px;}
+    
     .meta{
-      display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px
+      display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;
     }
     .tag{
-      font-size:12px;color:#475467;background:#f5f7fb;border:1px solid var(--line);
-      padding:6px 8px;border-radius:8px
+      font-size:11px;color:#475467;background:#f5f7fb;border:1px solid var(--line);
+      padding:5px 9px;border-radius:8px;
+      font-weight:600;
     }
-    .ctaRow{padding:12px 14px 14px;margin-top:auto}
+    
+    .operators{
+      display:flex;gap:6px;margin-top:8px;
+      opacity:0.8;
+    }
+    .operator-logo{
+      width:24px;height:24px;border-radius:4px;
+      background:#f1f5f9;display:flex;align-items:center;justify-content:center;
+      font-size:10px;color:#64748b;
+    }
+
+    .ctaRow{
+      padding:14px 16px 16px;margin-top:auto;
+    }
     .btn{
-      width:100%;appearance:none;border:none;border-radius:12px;padding:12px 14px;cursor:pointer;
-      color:#fff;background:linear-gradient(135deg,var(--cta), var(--cta2));font-weight:900;letter-spacing:.2px
+      width:100%;appearance:none;border:none;border-radius:12px;
+      padding:13px 16px;cursor:pointer;
+      color:#fff;background:linear-gradient(135deg,var(--cta), var(--cta2));
+      font-weight:900;letter-spacing:.3px;
+      font-size:15px;
+      box-shadow: 0 4px 12px rgba(14,168,88,0.3);
+      transition: all 0.2s ease;
     }
+    .btn:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(14,168,88,0.4);
+    }
+
     .footerNote{
-      margin-top:16px;font-size:12px;color:var(--muted);
+      margin-top:20px;font-size:13px;color:var(--muted);text-align:center;
     }
     .notice{
-      margin-top:14px;background:#eef4ff;border:1px solid #d9e6ff;color:#0b3aa6;
-      padding:10px 12px;border-radius:12px;font-size:12px
+      margin-top:16px;background:#eef4ff;border:1px solid #d9e6ff;color:#0b3aa6;
+      padding:12px 16px;border-radius:12px;font-size:13px;
+      display:flex;align-items:center;gap:10px;
     }
-    .sep{height:1px;background:var(--line);margin:12px 0}
+    .notice i{font-size:18px;}
+    .sep{height:1px;background:var(--line);margin:16px 0;}
+
+    /* Footer */
+    footer{
+      background:var(--footer-bg);
+      color:var(--footer-text);
+      padding:16px;
+      text-align:center;
+      font-size:12px;
+      margin-top:24px;
+      border-radius:12px;
+    }
+    footer a{
+      color:#94a3b8;text-decoration:underline;
+    }
+    footer a:hover{color:#cbd5e1;}
+
+    /* 18+ Notice */
+    .age-notice{
+      background:#fff8e1;border:1px solid #ffecb3;color:#9d5c00;
+      padding:10px 14px;border-radius:10px;font-size:12px;
+      display:flex;align-items:center;gap:8px;
+      margin-top:12px;
+    }
   </style>
 </head>
 <body>
@@ -118,7 +191,7 @@
         <div class="logo">ON</div>
         <div>
           <h1>Offernation — Active Offers</h1>
-          <div class="sub">Select your country offer and tap continue. Referrer preserved from Facebook.</div>
+          <div class="sub">Select your country offer and tap to continue.</div>
         </div>
       </div>
       <div class="filters" id="filters">
@@ -134,17 +207,32 @@
       <!-- Cards render here -->
     </section>
 
+    <div class="age-notice">
+      <i class="fas fa-exclamation-circle"></i>
+      <strong>18+ Only:</strong> These services are intended for adults. By continuing, you confirm you are over 18.
+    </div>
+
     <p class="footerNote">
       Tip for Representatives: always share the Facebook Page link that points here. When users click from Facebook, the
       network will see a facebook.com referrer, protecting your approvals.
     </p>
-    <div class="notice">Need help? Contact Offernation Support on WhatsApp.</div>
+    <div class="notice">
+      <i class="fas fa-info-circle"></i>
+      Need help? Contact Offernation Support on WhatsApp.
+    </div>
+
+    <footer>
+      <p>© 2025 Offernation. All rights reserved.</p>
+      <p>
+        <a href="https://malawiansadsversion3.blogspot.com/" target="_blank" rel="noopener">
+          Privacy Policy
+        </a>
+      </p>
+      <p>Powered by Mobidea Network</p>
+    </footer>
   </div>
 
   <script>
-    /* =========================
-       CONFIGURE YOUR OFFERS HERE
-       ========================= */
     const OFFERS = [
       {
         country: "Nigeria",
@@ -154,7 +242,6 @@
         description: "Quick mobile signup for MTN users. Receive SMS login and access service instantly.",
         tags: ["MTN", "Mobile Billing", "VAS", "Fast Signup"],
         payout: "₦ (network: ~$0.14)",
-        /* Replace with your Nigeria offer link */
         offerUrl: "https://www.wineisblue.support/click?offer_id=34331&pub_id=278557&pub_click_id=ADD_CLICK_ID_HERE&site=PASS_SITE_HERE"
       },
       {
@@ -165,14 +252,10 @@
         description: "Clean smartlink for top converting verticals. Auto-routes to best offer for device and carrier.",
         tags: ["Smartlink", "Mainstream", "Auto-Route", "High CTR"],
         payout: "$0.80 — $1.0 (typ.)",
-        /* Replace with your Ghana offer link */
         offerUrl: "https://www.wineisblue.support/click?offer_id=30748&pub_id=278557&pub_click_id=ADD_CLICK_ID_HERE&site=PASS_SITE_HERE"
       }
     ];
 
-    /* ============
-       RENDER CARDS
-       ============ */
     const grid = document.getElementById('offerGrid');
     function render(filter = "all"){
       grid.innerHTML = "";
@@ -181,7 +264,7 @@
         const card = document.createElement('article');
         card.className = "card";
         const badgeClass = o.country==="Nigeria" ? "badge ng" : "badge gh";
-        card.innerHTML = 
+        card.innerHTML = `
           <div class="cardTop">
             <span class="${badgeClass}">
               <span>${o.flag}</span>
@@ -193,32 +276,32 @@
             <div class="title">${o.title}</div>
             <p class="desc">${o.description}</p>
             <div class="meta">
-              ${o.tags.map(t=><span class="tag">${t}</span>).join("")}
+              ${o.tags.map(t=>`<span class="tag">${t}</span>`).join("")}
+            </div>
+            <div class="operators">
+              <div class="operator-logo">MTN</div>
+              <div class="operator-logo">AIR</div>
+              <div class="operator-logo">GLO</div>
             </div>
           </div>
           <div class="ctaRow">
             <button class="btn" data-url="${o.offerUrl}">Continue</button>
           </div>
-        ;
+        `;
         grid.appendChild(card);
       });
     }
     render();  
-/* ============================
-       FILTER BUTTON INTERACTIONS
-       ============================ */
+
     document.getElementById('filters').addEventListener('click', (e)=>{
       const b = e.target.closest('button[data-filter]');
       if(!b) return;
       [...document.querySelectorAll('.chip')].forEach(ch=>ch.classList.remove('active'));
       b.classList.add('active');
       render(b.dataset.filter);
-      attachClicks(); // rebind
+      attachClicks();
     });
 
-    /* ========================================
-       PASS THROUGH fbclid/utm TO OFFER LINKS
-       ======================================== */
     const passthroughKeys = ["fbclid","utm_source","utm_medium","utm_campaign","utm_term","utm_content"];
     const urlParams = new URLSearchParams(location.search);
     function appendPassthrough(base){
@@ -227,21 +310,16 @@
         passthroughKeys.forEach(k=>{
           if(urlParams.has(k)) u.searchParams.set(k, urlParams.get(k));
         });
-        // Optional: stamp source hint for your own analytics
         if (document.referrer) u.searchParams.set("ref_hint", "facebook_landing");
         return u.toString();
       }catch(_){ return base; }
     }
 
-    /* ===========================
-       BIND CTA CLICKS (NEW TAB)
-       =========================== */
     function attachClicks(){
       document.querySelectorAll('.btn[data-url]').forEach(btn=>{
         btn.addEventListener('click', ()=>{
           const raw = btn.getAttribute('data-url');
           const final = appendPassthrough(raw);
-          // Open in new tab; Facebook will still be referrer for this page
           window.open(final, '_blank', 'noopener,noreferrer');
         });
       });
@@ -250,24 +328,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
-    
-    
-
-  
-
-
-
-
-
-
-
-
-    
-
-    
