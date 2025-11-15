@@ -39,6 +39,7 @@
   <meta property="og:title" content="Offernation — Active Offers (NG & GH)"/>
   <meta property="og:description" content="Choose your country and tap to continue"/>
   <meta property="og:type" content="website"/>
+ <meta name="referrer" content="origin-when-cross-origin">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -217,28 +218,62 @@
 
 
 <script>
-  (async function() {
-    // Exit if already on an offer page or in dev
-    if (window.location.pathname.includes('offer') || window.location.hostname === 'localhost') return;
+  (function() {
+    // Exit if already redirected or on localhost
+    if (window.location.hostname === 'localhost' || 
+        window.location.search.includes('skip_redirect=1')) return;
 
-    try {
-      const res = await fetch('https://ipapi.co/json/', { method: 'GET', mode: 'cors' });
-      const data = await res.json();
-      
-      // Only redirect if country is Nigeria or Ghana
-      if (data.country_code === 'NG') {
-        window.location.href = "https://ln.run/D7bwW"; // Nigeria offer
-      } else if (data.country_code === 'GH') {
-        window.location.href = "https://ln.run/_fQyA"; // Ghana offer
+    // Helper: redirect safely
+    function safeRedirect(url) {
+      try {
+        // Preserve UTM/fbclid
+        const urlObj = new URL(url);
+        const params = new URLSearchParams(window.location.search);
+        for (const [key, value] of params) {
+          if (key.match(/^(fbclid|utm_|click_id|site|pub_sub_id)$/)) {
+            urlObj.searchParams.set(key, value);
+          }
+        }
+        window.location.replace(urlObj.toString());
+      } catch (e) {
+        window.location.href = url;
       }
-      // If not NG/GH, user sees the full page (no redirect)
-    } catch (e) {
-      console.warn('Geolocation failed, showing default page');
-      // Silently fail → user sees normal page
     }
+
+    // Primary: Try ipapi.co
+    fetch('https://ipapi.co/json/', { method: 'GET', mode: 'cors' })
+      .then(res => res.json())
+      .then(data => {
+        if (data.country_code === 'NG') {
+          safeRedirect('https://ln.run/D7bwW');
+        } else if (data.country_code === 'GH') {
+          safeRedirect('https://ln.run/_fQyA');
+        }
+      })
+      .catch(() => {
+        // Fallback 1: Try ipgeolocation.io (no key needed for basic use)
+        fetch('https://api.ipgeolocation.io/ipgeo?fields=country_code', { mode: 'cors' })
+          .then(res => res.json())
+          .then(data => {
+            if (data.country_code === 'NG') {
+              safeRedirect('https://ln.run/D7bwW');
+            } else if (data.country_code === 'GH') {
+              safeRedirect('https://ln.run/_fQyA');
+            }
+          })
+          .catch(() => {
+            // Fallback 2: Use browser language
+            const lang = navigator.language;
+            if (lang.includes('en-NG') || lang.includes('ha') || lang.includes('yo') || lang.includes('ig')) {
+              safeRedirect('https://ln.run/D7bwW');
+            } else if (lang.includes('en-GH')) {
+              safeRedirect('https://ln.run/_fQyA');
+            }
+            // If all fail, show the normal page
+          });
+      });
   })();
 </script>
-
 
 
 
