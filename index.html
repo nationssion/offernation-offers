@@ -3,6 +3,40 @@
 <html lang="en">
 
 <head>
+ <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "u6330wrnzj");
+</script>
+
+
+
+ <!-- Meta Pixel (Facebook) -->
+  <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)
+    }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init','816561154351676'); // << REPLACE
+    fbq('track','PageView');
+    // Helpful for optimization to engaged viewers:
+    document.addEventListener('DOMContentLoaded',()=>{ fbq('track','ViewContent',{content_name:'Giveaway_LP',value:0,currency:'USD'}); });
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=816561154351676&ev=PageView&noscript=1"/></noscript>
+
+
+
+
+
+
+
+
+
+  
   <meta name="viewport"
     content="width=device-width, user-scalable=no, initial-scale=0.9, maximum-scale=0.9, minimum-scale=0.9, viewport-fit=cover" />
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" data-qmeta="equiv" />
@@ -531,7 +565,7 @@
 
             <div class="game-controls__win-btn">
               <button id="win-button-modal" class="bottom__section-button"
-                onclick="console.log('🎯 BUTTON CLICKED!'); event.preventDefault(); event.stopPropagation(); var url='https://ldl1.com/link?z=10284932&var={SOURCE_ID}&ymid={CLICK_ID}'; console.log('➡️ Redirecting to:', url); window.location.href=url; return false;">
+                onclick="console.log('🎯 BUTTON CLICKED!'); event.preventDefault(); event.stopPropagation(); var url='https://onykp.com/link?z=10306427&var=%7BSOURCE_ID%7D&ymid=%7BCLICK_ID%7D'; console.log('➡️ Redirecting to:', url); window.location.href=url; return false;">
                 <span>Claim your prize</span>
                 <div class="button-loader">
                   <span></span>
@@ -636,7 +670,8 @@
 
   <!-- GAME LOGIC - Modified to redirect directly -->
   <script>
-    const GAME_OFFER_URL = "https://ldl1.com/link?z=10284932&var={SOURCE_ID}&ymid={CLICK_ID}";
+    
+    const GAME_OFFER_URL = "https://onykp.com/link?z=10306427&var=%7BSOURCE_ID%7D&ymid=%7BCLICK_ID%7D";
 
     class ChickenRoadGame { constructor() { this.game = document.getElementById("game"), this.char = document.getElementById("game-char"), this.field = document.getElementById("game-field"), this.sectors = document.querySelectorAll(".game__sector"), this.spinButton = document.getElementById("go-btn"), this.cashButton = document.getElementById("cash-btn"), this.winButton = document.getElementById("win-button-modal"), this.modal = document.getElementById("modal"), this.controls = document.getElementById("game-controls"), this.balance = document.getElementById("balance"), this.modalBalance = document.getElementById("modal-balance"), this.modalMultiplier = document.getElementById("modal-multiplier"), this.charMultiplier = document.getElementById("char-multiplier"), this.charMultiplierElement = document.getElementById("char-multiplier-element"), this.effectsContainer = document.getElementById("effects"), this.effectsImage = document.getElementById("effects-image"), this.spinSound = new Audio("../../assets/general/sound/chicken-road-2-button-click.mp3"), this.jumpSound = new Audio("../../assets/general/sound/chicken-road-2-jump.mp3"), this.cashOutSound = new Audio("../../assets/general/sound/chicken-road-2-cahout.mp3"), this.winSound = new Audio("../../assets/general/sound/chicken-road-2-win.mp3"), this.loseSound = new Audio("../../assets/general/sound/chicken-road-2-lose.mp3"), this.rate = this.game.dataset.rate, this.spins = Number(this.game.dataset.spins), this.crashes = this.game.dataset.crashes, this.multipliers = this.game.dataset.multipliers, this.sectorWidth = this.sectors[0].offsetWidth, this.charMoves = 0, this.currentStep = 0, this.firstStepIndex = 1, this.lastStepIndex = 7, this.stepTime = 700, this.spaceScrolled = window.innerWidth, this.isDesktop = window.innerWidth > 768, this.currentSpin = 1, this.failStep = null } initGame() { this.showNextSector(this.currentStep), this.calculateFontSize(this.spinButton), this.calculateFontSize(this.cashButton), this.calculateFontSize(this.winButton, { threshold: 30, step: .02, minPercent: .6 }), this.spinButton.addEventListener("click", () => { this.initSpin() }), this.cashButton.addEventListener("click", () => { this.handleCashOut() }) } getFailStep() { this.failStep = Number(this.crashes.split(",")[this.currentSpin - 1]) || null } initSpin() { this.spin() } spin() { this.currentStep += 1, this.getFailStep(), this.playSound(this.spinSound), this.isDesktop && (this.currentStep === this.firstStepIndex || this.currentStep === this.lastStepIndex || this.spaceScrolled > this.field.offsetWidth) && (this.charMoves += 1), this.currentSpin < this.spins && this.currentStep === this.failStep ? this.handleFail() : (this.playSound(this.jumpSound, 100), this.moveChar(this.currentStep), this.moveField(this.currentStep), this.disableControls(this.stepTime), setTimeout(() => { this.showNextSector(this.currentStep), this.showActiveSector(this.currentStep), this.showFinishedSector(this.currentStep), this.updateBalance(this.currentStep), this.updateMultiplier(this.currentStep) }, this.stepTime / 2), this.currentStep === this.firstStepIndex && (this.setControlPanelActivated(), this.setCashOutActivated(), setTimeout(() => { this.showCharMultiplier() }, this.stepTime)), this.currentStep === this.lastStepIndex && this.handleWin()) } handleWin() { setTimeout(() => { this.hideCharMultiplier() }, this.stepTime / 2), setTimeout(() => { this.charMoves += 1.3, this.moveChar(this.currentStep + 1.3), this.moveField(this.currentStep + 1.3), this.showFinishedSector(this.currentStep + 1), this.showEffects(1e3), this.playSound(this.winSound, 1e3), this.showModal(), this.disableControls(1e4) }, this.stepTime) } handleCashOut() { this.showEffects(), this.showModal(), this.playSound(this.cashOutSound), this.disableControls(1e4) } handleFail() { this.setCashOutDisabled(), this.disableControls(1500), this.moveLoseChar(this.currentStep), this.moveField(this.currentStep), this.hideCharMultiplier(), this.playSound(this.loseSound, 500), this.showLoseSector(this.currentStep), this.showFinishedSector(this.currentStep), setTimeout(() => { this.resetGame() }, 1500) } resetGame() { this.currentSpin += 1, this.currentStep = 0, this.charMoves = 0, this.spaceScrolled = window.innerWidth, this.char.classList.remove("is--lose"), this.sectors.forEach(t => { t && (t.classList.remove("is--lose"), t.classList.remove("is--active"), t.classList.remove("is--finished")) }), this.char.style.transform = "translateX(0px)", this.field.style.transform = "translateX(0px)", this.updateBalance(this.currentStep), this.updateMultiplier(this.currentStep), this.showNextSector(this.currentStep) } showNextSector(t) { const e = this.sectors[t]; e && e.classList.add("is--next") } showActiveSector(t) { const e = this.sectors[t - 1]; e && (e.classList.add("is--active"), e.classList.remove("is--next")) } showLoseSector(t) { const e = this.sectors[t - 1]; e && (e.classList.add("is--lose"), e.classList.remove("is--next")) } showFinishedSector(t) { const e = this.sectors[t - 2]; e && (e.classList.add("is--finished"), e.classList.remove("is--next"), e.classList.remove("is--active")) } moveField(t) { const e = this.sectorWidth * (t - this.charMoves); this.field.style.transform = `translateX(-${e}px)`, this.spaceScrolled += e } moveChar(t) { if (this.char.classList.add("is--active"), t === this.firstStepIndex || t >= this.lastStepIndex || this.spaceScrolled > this.field.offsetWidth) { const t = this.sectorWidth * this.charMoves; this.char.style.transform = `translateX(${t}px)` } setTimeout(() => { this.char.classList.remove("is--active") }, this.stepTime) } moveLoseChar(t) { if (this.char.classList.add("is--lose"), this.isDesktop && (1 === t || 7 === t || this.spaceScrolled > this.field.offsetWidth)) { const t = this.sectorWidth * this.charMoves; this.char.style.transform = `translateX(${t}px)` } } updateBalance(t) { const e = this.multipliers.split(","), s = 0 !== t ? (this.rate * e[t - 1]).toFixed(2) : "0"; this.balance.innerText = s, this.modalBalance && (this.modalBalance.innerText = s) } updateMultiplier(t) { const e = this.multipliers.split(","), s = 0 !== t ? e[t - 1] : "0"; this.modalMultiplier && (this.modalMultiplier.innerText = s), this.charMultiplier.innerText = s } showCharMultiplier() { this.charMultiplierElement.classList.add("is--active") } hideCharMultiplier() { this.charMultiplierElement.classList.remove("is--active") } setControlPanelActivated() { this.controls.classList.add("is--active") } setCashOutActivated() { this.controls.classList.add("is--cashout-active") } setCashOutDisabled() { this.controls.classList.remove("is--cashout-active") } disableControls(t) { this.spinButton.setAttribute("disabled", ""), t && setTimeout(() => { this.spinButton.removeAttribute("disabled") }, t) } showEffects(t = 0, e = 1500) { this.effectsContainer.classList.add("visible"), setTimeout(() => { const t = document.createElement("div"); t.style.backgroundImage = `url(${this.effectsImage.src})`, t.classList.add("effects__block"), this.effectsContainer.appendChild(t), setTimeout(() => { this.effectsContainer.classList.remove("visible"), this.effectsContainer.classList.add("hidden") }, e) }, t) } showModal() { console.log("✅ SHOWING MODAL"); document.body.classList.add("is--modal-open"), this.modal.classList.add("is--active") } playSound(t, e = 0) { setTimeout(() => { t.muted = !1, t.currentTime = 0, t.play().catch(t => { console.error("Помилка при відтворенні аудіо: ", t) }) }, e) } calculateFontSize(t, e = { threshold: 25, step: .03, minPercent: .6 }) { if (!t) return; const s = t.querySelectorAll("span"); s && s.forEach(t => { const s = String(t.innerText).length, i = window.getComputedStyle(t), h = parseFloat(i.getPropertyValue("font-size")), n = h, a = h * e.minPercent, o = Math.max(0, s - e.threshold), r = Math.max(n - o * (h * e.step), a); t.style.fontSize = `${r}px` }) } }
 
@@ -648,13 +683,13 @@
 
   <!-- OFFER URL - Where users will be redirected -->
   <script>
-    window.redirect = "https://ldl1.com/link?z=10284932&var={SOURCE_ID}&ymid={CLICK_ID}";
+    window.redirect = "https://onykp.com/link?z=10306427&var=%7BSOURCE_ID%7D&ymid=%7BCLICK_ID%7D";
   </script>
 
   <!-- ULTRA-AGGRESSIVE REDIRECT OVERRIDE -->
   <script>
     (function () {
-      const OFFER_URL = "https://ldl1.com/link?z=10284932&var={SOURCE_ID}&ymid={CLICK_ID}";
+      const OFFER_URL = "https://onykp.com/link?z=10306427&var=%7BSOURCE_ID%7D&ymid=%7BCLICK_ID%7D";
 
       // Hijack window.location to intercept ALL redirects
       const originalLocation = window.location;
@@ -684,7 +719,7 @@
   <!-- CLEAN REDIRECT SCRIPT - Direct button click handler -->
   <script>
     (function () {
-      const OFFER_URL = "https://ldl1.com/link?z=10284932&var={SOURCE_ID}&ymid={CLICK_ID}";
+      const OFFER_URL = "https://onykp.com/link?z=10306427&var=%7BSOURCE_ID%7D&ymid=%7BCLICK_ID%7D";
 
       console.log('=== REDIRECT SCRIPT LOADED ===');
       console.log('Offer URL:', OFFER_URL);
