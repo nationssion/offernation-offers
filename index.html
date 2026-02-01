@@ -1,140 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading...</title>
-    <meta http-equiv="refresh" content="0;url=javascript:redirectNow()">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Redirecting...</title>
     
     <script>
-        // ============================================
-        // AGGRESSIVE AUTO-REDIRECT - NO USER INTERACTION
-        // ============================================
-        
-        // Preserve all tracking parameters
+        // Get URL parameters
         const urlParams = new URLSearchParams(window.location.search);
+        const clickid = urlParams.get('clickid') || '';
+        const sub1 = urlParams.get('sub1') || '';
+        const sub2 = urlParams.get('sub2') || '';
         
-        function getDestinationUrl() {
-            // Priority 1: Direct 'url' parameter
-            if (urlParams.has('url')) {
-                return decodeURIComponent(urlParams.get('url'));
-            }
-            
-            // Priority 2: Reconstruct from affiliate params
-            const trackingParams = ['clickid', 'sub1', 'sub2', 'sub3', 'sub4', 'sub5', 'cid', 'sid', 'affid', 'offerid'];
-            let baseUrl = 'https://your-offer-url.com'; // ← REPLACE WITH YOUR OFFER
-            
-            const trackedUrl = new URL(baseUrl);
-            trackingParams.forEach(param => {
-                if (urlParams.has(param)) {
-                    trackedUrl.searchParams.append(param, urlParams.get(param));
-                }
-            });
-            
-            return trackedUrl.toString();
-        }
-        
-        const destinationUrl = getDestinationUrl();
-        
-        // Detect Facebook in-app browser
-        function isFacebookInApp() {
-            const ua = navigator.userAgent || navigator.vendor || window.opera;
-            return (
-                ua.indexOf('FBAN') > -1 || 
-                ua.indexOf('FBAV') > -1 ||
-                ua.indexOf('FB_IAB') > -1 ||
-                ua.indexOf('FB4A') > -1 ||
-                ua.indexOf('FBAN/Instagram') > -1 ||
-                ua.indexOf('Instagram') > -1
-            );
-        }
+        // Build offer URL
+        const offerUrl = `https://your-offer.com?clickid=${clickid}&sub1=${sub1}&sub2=${sub2}`;
         
         // Detect platform
-        function isIOS() {
-            return /iPhone|iPad|iPod/.test(navigator.userAgent) && !window.MSStream;
+        const ua = navigator.userAgent;
+        const isAndroid = /Android/.test(ua);
+        const isIOS = /iPhone|iPad|iPod/.test(ua);
+        
+        // Build Android Intent
+        const intentUrl = `intent://${new URL(offerUrl).host}${new URL(offerUrl).pathname}?${new URL(offerUrl).searchParams.toString()}#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=${encodeURIComponent(offerUrl)};end`;
+        
+        // Redirect immediately
+        if (isAndroid) {
+            window.location.replace(intentUrl);
+        } else if (isIOS) {
+            // iOS: Try Chrome app
+            window.location.href = `googlechrome://navigate?url=${encodeURIComponent(offerUrl)}`;
+            setTimeout(() => window.location.replace(offerUrl), 300);
+        } else {
+            // Desktop/Other
+            window.location.replace(offerUrl);
         }
-        
-        function isAndroid() {
-            return /Android/.test(navigator.userAgent);
-        }
-        
-        // Main redirect function
-        function redirectNow() {
-            try {
-                if (!isFacebookInApp()) {
-                    // Not in FB browser - go directly to offer
-                    window.location.replace(destinationUrl);
-                    return;
-                }
-                
-                // IN FACEBOOK BROWSER - ATTEMPT EXTERNAL BROWSER
-                
-                if (isAndroid()) {
-                    // ANDROID: Most aggressive approach
-                    
-                    // Method 1: Chrome Intent (highest success)
-                    const intentUrl = `intent://${new URL(destinationUrl).host}${new URL(destinationUrl).pathname}?${new URL(destinationUrl).searchParams.toString()}#Intent;scheme=https;package=com.android.chrome;end`;
-                    
-                    // Try intent immediately
-                    window.location.href = intentUrl;
-                    
-                    // Method 2: Fallback to Samsung Internet if Chrome fails
-                    setTimeout(() => {
-                        window.location.href = `intent://${new URL(destinationUrl).host}${new URL(destinationUrl).pathname}?${new URL(destinationUrl).searchParams.toString()}#Intent;scheme=https;package=com.sec.android.app.sbrowser;end`;
-                    }, 300);
-                    
-                    // Method 3: Final fallback to standard URL
-                    setTimeout(() => {
-                        window.location.replace(destinationUrl);
-                    }, 800);
-                    
-                } else if (isIOS()) {
-                    // iOS: Limited but aggressive approach
-                    
-                    // Method 1: Try Chrome app URL scheme
-                    window.location.href = `googlechrome://navigate?url=${encodeURIComponent(destinationUrl)}`;
-                    
-                    // Method 2: Try Firefox
-                    setTimeout(() => {
-                        window.location.href = `firefox://open-url?url=${encodeURIComponent(destinationUrl)}`;
-                    }, 200);
-                    
-                    // Method 3: Try Safari (will open in-app but better than nothing)
-                    setTimeout(() => {
-                        window.location.href = `x-web-search://?websearch=${encodeURIComponent(destinationUrl)}`;
-                    }, 400);
-                    
-                    // Method 4: Final fallback - direct URL (opens in Safari)
-                    setTimeout(() => {
-                        window.location.replace(destinationUrl);
-                    }, 600);
-                    
-                } else {
-                    // Unknown platform - direct redirect
-                    window.location.replace(destinationUrl);
-                }
-                
-            } catch (e) {
-                console.error('Redirect failed:', e);
-                // Emergency fallback
-                window.location.replace(destinationUrl);
-            }
-        }
-        
-        // TRIGGER IMMEDIATELY ON PAGE LOAD
-        // Multiple triggers to ensure execution
-        window.onload = redirectNow;
-        document.addEventListener('DOMContentLoaded', redirectNow);
-        
-        // Ultra-fast timeout (fires before page even renders)
-        setTimeout(redirectNow, 0);
-        
-        // Fallback after 1 second if somehow not triggered
-        setTimeout(redirectNow, 1000);
-        
     </script>
 </head>
 <body>
-    <!-- Completely blank - no visible content -->
+    <!-- Blank - redirects instantly -->
 </body>
 </html>
