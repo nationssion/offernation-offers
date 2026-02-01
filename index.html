@@ -6,37 +6,63 @@
     <title>Redirecting...</title>
     
     <script>
+        // ============================================
+        // ANDROID INTENT REDIRECT - GITHUB PAGES VERSION
+        // ============================================
+        
         // Get URL parameters
         const urlParams = new URLSearchParams(window.location.search);
-        const clickid = urlParams.get('clickid') || '';
+        
+        // Get tracking parameters (Zeydoo/Adsterra style)
+        const clickid = urlParams.get('clickid') || urlParams.get('sub1') || '';
         const sub1 = urlParams.get('sub1') || '';
         const sub2 = urlParams.get('sub2') || '';
+        const sub3 = urlParams.get('sub3') || '';
+        const sub4 = urlParams.get('sub4') || '';
+        const sub5 = urlParams.get('sub5') || '';
+        const cid = urlParams.get('cid') || '';
+        const sid = urlParams.get('sid') || '';
         
-        // Build offer URL
-        const offerUrl = `https://your-offer.com?clickid=${clickid}&sub1=${sub1}&sub2=${sub2}`;
+        // Build your offer URL with ALL tracking parameters
+        const baseUrl = 'https://your-offer-url.com'; // ← REPLACE WITH YOUR OFFER
+        
+        const offerUrl = new URL(baseUrl);
+        if (clickid) offerUrl.searchParams.append('clickid', clickid);
+        if (sub1) offerUrl.searchParams.append('sub1', sub1);
+        if (sub2) offerUrl.searchParams.append('sub2', sub2);
+        if (sub3) offerUrl.searchParams.append('sub3', sub3);
+        if (sub4) offerUrl.searchParams.append('sub4', sub4);
+        if (sub5) offerUrl.searchParams.append('sub5', sub5);
+        if (cid) offerUrl.searchParams.append('cid', cid);
+        if (sid) offerUrl.searchParams.append('sid', sid);
         
         // Detect platform
         const ua = navigator.userAgent;
         const isAndroid = /Android/.test(ua);
         const isIOS = /iPhone|iPad|iPod/.test(ua);
         
-        // Build Android Intent
-        const intentUrl = `intent://${new URL(offerUrl).host}${new URL(offerUrl).pathname}?${new URL(offerUrl).searchParams.toString()}#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=${encodeURIComponent(offerUrl)};end`;
+        // Build Android Intent URL
+        const intentUrl = `intent://${offerUrl.host}${offerUrl.pathname}?${offerUrl.searchParams.toString()}#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=${encodeURIComponent(offerUrl.toString())};end`;
         
         // Redirect immediately
         if (isAndroid) {
+            // Android: Trigger Intent
             window.location.replace(intentUrl);
         } else if (isIOS) {
-            // iOS: Try Chrome app
-            window.location.href = `googlechrome://navigate?url=${encodeURIComponent(offerUrl)}`;
-            setTimeout(() => window.location.replace(offerUrl), 300);
+            // iOS: Try Chrome app scheme
+            window.location.href = `googlechrome://navigate?url=${encodeURIComponent(offerUrl.toString())}`;
+            // Fallback to Safari after 300ms
+            setTimeout(() => {
+                window.location.replace(offerUrl.toString());
+            }, 300);
         } else {
-            // Desktop/Other
-            window.location.replace(offerUrl);
+            // Desktop/Other browsers
+            window.location.replace(offerUrl.toString());
         }
     </script>
 </head>
 <body>
-    <!-- Blank - redirects instantly -->
+    <!-- Blank page - redirects instantly -->
+    <p>Redirecting...</p>
 </body>
 </html>
