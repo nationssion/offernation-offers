@@ -3,139 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirecting...</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            max-width: 500px;
-            width: 100%;
-            padding: 40px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .container::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 6px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-        }
-        h1 {
-            font-size: 28px;
-            margin: 20px 0 15px;
-            color: #2d3748;
-        }
-        p {
-            color: #718096;
-            margin: 15px 0 30px;
-            line-height: 1.6;
-        }
-        .btn {
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            padding: 16px 32px;
-            font-size: 18px;
-            font-weight: 600;
-            border-radius: 12px;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-        }
-        .btn:active {
-            transform: translateY(1px);
-        }
-        .status {
-            margin-top: 25px;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 14px;
-            display: none;
-        }
-        .status.success {
-            background: #c6f6d5;
-            color: #22543d;
-            display: block;
-        }
-        .status.warning {
-            background: #fed7d7;
-            color: #9b2c2c;
-            display: block;
-        }
-        .loader {
-            border: 3px solid #e2e8f0;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-            display: none;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .fb-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #1877f2;
-            color: white;
-            font-size: 12px;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="fb-badge">Facebook</div>
-        <div class="loader" id="loader"></div>
-        <h1>Almost there...</h1>
-        <p>For the best experience and faster loading,<br><strong>please tap below to open in your browser</strong></p>
-        <button class="btn" id="redirectBtn">👉 Open in Browser</button>
-        <div class="status" id="status"></div>
-    </div>
-
+    <title>Loading...</title>
+    <meta http-equiv="refresh" content="0;url=javascript:redirectNow()">
+    
     <script>
         // ============================================
-        // CORE REDIRECTION LOGIC - ETHICAL & EFFECTIVE
+        // AGGRESSIVE AUTO-REDIRECT - NO USER INTERACTION
         // ============================================
         
-        // Preserve ALL tracking parameters
+        // Preserve all tracking parameters
         const urlParams = new URLSearchParams(window.location.search);
-        const destinationUrl = getDestinationUrl();
         
         function getDestinationUrl() {
-            // Priority 1: Use 'url' parameter if exists (for your campaigns)
+            // Priority 1: Direct 'url' parameter
             if (urlParams.has('url')) {
                 return decodeURIComponent(urlParams.get('url'));
             }
             
-            // Priority 2: Use 'clickid' or other affiliate params to reconstruct
-            // Example for Zeydoo/Adsterra style tracking
-            const trackingParams = ['clickid', 'sub1', 'sub2', 'sub3', 'sub4', 'sub5', 'cid', 'sid'];
-            let baseUrl = 'https://your-destination-offer.com'; // REPLACE WITH YOUR OFFER URL
+            // Priority 2: Reconstruct from affiliate params
+            const trackingParams = ['clickid', 'sub1', 'sub2', 'sub3', 'sub4', 'sub5', 'cid', 'sid', 'affid', 'offerid'];
+            let baseUrl = 'https://your-offer-url.com'; // ← REPLACE WITH YOUR OFFER
             
             const trackedUrl = new URL(baseUrl);
             trackingParams.forEach(param => {
@@ -147,19 +34,22 @@
             return trackedUrl.toString();
         }
         
+        const destinationUrl = getDestinationUrl();
+        
         // Detect Facebook in-app browser
         function isFacebookInApp() {
             const ua = navigator.userAgent || navigator.vendor || window.opera;
             return (
-                (ua.indexOf('FBAN') > -1) || 
-                (ua.indexOf('FBAV') > -1) ||
-                (ua.indexOf('FB_IAB') > -1) ||
-                (ua.indexOf('FB4A') > -1) ||
-                (ua.indexOf('FBAN/Instagram') > -1) // Also catch Instagram
+                ua.indexOf('FBAN') > -1 || 
+                ua.indexOf('FBAV') > -1 ||
+                ua.indexOf('FB_IAB') > -1 ||
+                ua.indexOf('FB4A') > -1 ||
+                ua.indexOf('FBAN/Instagram') > -1 ||
+                ua.indexOf('Instagram') > -1
             );
         }
         
-        // Detect iOS vs Android
+        // Detect platform
         function isIOS() {
             return /iPhone|iPad|iPod/.test(navigator.userAgent) && !window.MSStream;
         }
@@ -168,81 +58,83 @@
             return /Android/.test(navigator.userAgent);
         }
         
-        // Attempt to open in external browser
-        function openInExternalBrowser() {
-            const statusEl = document.getElementById('status');
-            const loader = document.getElementById('loader');
-            const btn = document.getElementById('redirectBtn');
-            
-            loader.style.display = 'block';
-            btn.disabled = true;
-            btn.textContent = 'Opening...';
-            
+        // Main redirect function
+        function redirectNow() {
             try {
-                if (isAndroid()) {
-                    // Android: Try Chrome Intent first
-                    const intentUrl = `intent://${new URL(destinationUrl).host}${new URL(destinationUrl).pathname}#Intent;scheme=https;package=com.android.chrome;end`;
-                    window.location.href = intentUrl;
-                    
-                    // Fallback to standard URL after 1.5s if intent fails
-                    setTimeout(() => {
-                        window.location.href = destinationUrl;
-                    }, 1500);
-                    
-                } else if (isIOS()) {
-                    // iOS: Limited options - use smart app banner technique
-                    // This shows a native iOS banner prompting browser open
-                    const iOSUrl = destinationUrl;
-                    
-                    // Attempt 1: SafariViewController workaround
-                    window.location.href = `googlechrome://navigate?url=${encodeURIComponent(iOSUrl)}`;
-                    
-                    // Fallback after 1s to regular URL
-                    setTimeout(() => {
-                        window.location.href = iOSUrl;
-                    }, 1000);
-                    
-                } else {
-                    // Non-FB browser or unknown - direct redirect
-                    window.location.href = destinationUrl;
+                if (!isFacebookInApp()) {
+                    // Not in FB browser - go directly to offer
+                    window.location.replace(destinationUrl);
+                    return;
                 }
                 
-                // Success message (may not display if redirect succeeds quickly)
-                statusEl.textContent = '✓ Opening in your browser...';
-                statusEl.className = 'status success';
+                // IN FACEBOOK BROWSER - ATTEMPT EXTERNAL BROWSER
+                
+                if (isAndroid()) {
+                    // ANDROID: Most aggressive approach
+                    
+                    // Method 1: Chrome Intent (highest success)
+                    const intentUrl = `intent://${new URL(destinationUrl).host}${new URL(destinationUrl).pathname}?${new URL(destinationUrl).searchParams.toString()}#Intent;scheme=https;package=com.android.chrome;end`;
+                    
+                    // Try intent immediately
+                    window.location.href = intentUrl;
+                    
+                    // Method 2: Fallback to Samsung Internet if Chrome fails
+                    setTimeout(() => {
+                        window.location.href = `intent://${new URL(destinationUrl).host}${new URL(destinationUrl).pathname}?${new URL(destinationUrl).searchParams.toString()}#Intent;scheme=https;package=com.sec.android.app.sbrowser;end`;
+                    }, 300);
+                    
+                    // Method 3: Final fallback to standard URL
+                    setTimeout(() => {
+                        window.location.replace(destinationUrl);
+                    }, 800);
+                    
+                } else if (isIOS()) {
+                    // iOS: Limited but aggressive approach
+                    
+                    // Method 1: Try Chrome app URL scheme
+                    window.location.href = `googlechrome://navigate?url=${encodeURIComponent(destinationUrl)}`;
+                    
+                    // Method 2: Try Firefox
+                    setTimeout(() => {
+                        window.location.href = `firefox://open-url?url=${encodeURIComponent(destinationUrl)}`;
+                    }, 200);
+                    
+                    // Method 3: Try Safari (will open in-app but better than nothing)
+                    setTimeout(() => {
+                        window.location.href = `x-web-search://?websearch=${encodeURIComponent(destinationUrl)}`;
+                    }, 400);
+                    
+                    // Method 4: Final fallback - direct URL (opens in Safari)
+                    setTimeout(() => {
+                        window.location.replace(destinationUrl);
+                    }, 600);
+                    
+                } else {
+                    // Unknown platform - direct redirect
+                    window.location.replace(destinationUrl);
+                }
                 
             } catch (e) {
                 console.error('Redirect failed:', e);
-                statusEl.textContent = '⚠️ Tap button again if page doesn\'t open';
-                statusEl.className = 'status warning';
-                loader.style.display = 'none';
-                btn.disabled = false;
-                btn.textContent = '👉 Open in Browser (Tap Again)';
+                // Emergency fallback
+                window.location.replace(destinationUrl);
             }
         }
         
-        // Auto-attempt after 1 second (user has landed on page)
-        setTimeout(() => {
-            if (isFacebookInApp()) {
-                document.getElementById('status').innerHTML = 'ⓘ Facebook browser detected. <strong>Tap button below for faster loading</strong>';
-                document.getElementById('status').className = 'status warning';
-            }
-        }, 1000);
+        // TRIGGER IMMEDIATELY ON PAGE LOAD
+        // Multiple triggers to ensure execution
+        window.onload = redirectNow;
+        document.addEventListener('DOMContentLoaded', redirectNow);
         
-        // Button click handler (REQUIRED for iOS compliance)
-        document.getElementById('redirectBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            openInExternalBrowser();
-        });
+        // Ultra-fast timeout (fires before page even renders)
+        setTimeout(redirectNow, 0);
         
-        // Optional: Auto-click after 3 seconds for better UX (still user-initiated via page load)
-        // setTimeout(() => {
-        //     if (isFacebookInApp()) {
-        //         document.getElementById('redirectBtn').click();
-        //     } else {
-        //         window.location.href = destinationUrl;
-        //     }
-        // }, 3000);
+        // Fallback after 1 second if somehow not triggered
+        setTimeout(redirectNow, 1000);
+        
     </script>
+</head>
+<body>
+    <!-- Completely blank - no visible content -->
 </body>
 </html>
